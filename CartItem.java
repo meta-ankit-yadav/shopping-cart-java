@@ -1,5 +1,3 @@
-import java.util.Objects;
-
 record CartItem(
     String id,
     String name,
