@@ -1,44 +1,35 @@
 import java.util.HashMap;
-import java.util.UUID;
 
 public class Cart {
     
-    private HashMap<String, CartItem> cartMap = new HashMap<>();
+    private HashMap<Integer, Item> cartMap = new HashMap<>();
 
-    public String addItem(CartItem item) {
-        String key = UUID.randomUUID().toString();
-
-        // Add the generated key to item
-        CartItem updatedItem = new CartItem(key, item.name(), item.description(), item.price(), item.quantity());
-
-        cartMap.put(key, updatedItem); 
-
-        return key;
+    public int size() {
+        return cartMap.size();
     }
 
-    public void displayQuantity(String itemId) {
+    public boolean addItem(Item item, int quantity) {
 
-        // Check if any item with provided ID exists
-        Boolean exists = cartMap.containsKey(itemId);
+        // Check if Item already exists in cart
+        Boolean exists = cartMap.containsKey(item.id());
+        if (exists) return false;
 
-        if (exists) {
-            
-            // Get the stored item
-            CartItem item = cartMap.get(itemId);
+        // Add quantity to Item
+        Item updatedItem = new Item(item.id(), item.name(), item.description(), item.price(), quantity);
 
-            // Get the name and quantity of item
-            String name = item.name();
-            Integer quantity = item.quantity();
+        // Add item to cart
+        cartMap.put(item.id(), updatedItem);
 
-            // Print a message indicating quantity of item
-            System.out.println("The quantity for product named " + name + " is " + quantity);
-        } else {
-            System.out.println("No item with such ID exists in the cart.");
+        return true;
+    }
+
+    public void displayCart() {
+        for (Item item : cartMap.values()) {
+            System.out.println("    " + item.id() + ". " + item.name() + " - Rs " + item.price() + " - " + item.quantity());
         }
-    
     }
 
-    public void updateQuantity(String itemId, Integer updatedQuantity) {
+    public void updateQuantity(Integer itemId, Integer updatedQuantity) {
 
         // Check if any item with provided ID exists
         Boolean exists = cartMap.containsKey(itemId);
@@ -46,21 +37,23 @@ public class Cart {
         if (exists) {
 
             // Get the stored item
-            CartItem item = cartMap.get(itemId);
+            Item item = cartMap.get(itemId);
 
             // Create updated item with new quantity
-            CartItem updatedItem = new CartItem(item.id(), item.name(), item.description(), item.price(), updatedQuantity);
+            Item updatedItem = new Item(item.id(), item.name(), item.description(), item.price(), updatedQuantity);
 
             // Replace existing item
             cartMap.replace(item.id(), updatedItem);
 
+            System.out.println("Item quantity replaced successfully.");
+
         } else {
             System.out.println("No item with such ID exists in the cart.");
         }
 
     }
 
-    public void deleteItem(String itemId) {
+    public void deleteItem(Integer itemId) {
 
         // Check if any item with provided ID exists
         Boolean exists = cartMap.containsKey(itemId);
@@ -68,25 +61,22 @@ public class Cart {
         if (exists) {
             // Delete the item
             cartMap.remove(itemId);
+            System.out.println("Item deleted successfully");
         } else {
             System.out.println("No item with such ID exists in the cart.");
         }
 
     }
 
-    public void displayBill() {
-
-        // Start with total bill as 0
+    public Double bill() {
         Double totalBill = 0.0;
 
         // Iterate through each item and add it's value to bill
-        for (CartItem item : cartMap.values()) {
+        for (Item item : cartMap.values()) {
             totalBill += item.quantity() * item.price();
         }
 
-        // Print the total bill value
-        System.out.println("Total bill value: " + totalBill);
-
+        return totalBill;
     }
 
 }
