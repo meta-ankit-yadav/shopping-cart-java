@@ -1,13 +1,11 @@
-// Alternative of records
-
 public class Item {
-    private String id;
+    private Integer id;
     private String name;
     private String description;
     private Float price;
     private Integer quantity;
 
-    public Item(String id, String name, String description, Float price, Integer quantity) {
+    public Item(int id, String name, String description, Float price, Integer quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -15,7 +13,7 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public String id() {
+    public int id() {
         return id;
     }
 
@@ -27,11 +25,11 @@ public class Item {
         return description;
     }
 
-    public Float price() {
+    public float price() {
         return price;
     }
 
-    public Integer quantity() {
+    public int quantity() {
         return quantity;
     }
 }
